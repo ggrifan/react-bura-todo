@@ -8,7 +8,7 @@ export default class ItemAddForm extends React.Component {
         return (
             <div className="item-add-form">
                 <button className="btn btn-outline-secondary"
-                        onClick={ () => this.props.onAdded('Hello') }>Add Item</button>
+                        onClick={ () => this.props.onAddItem('Hello') }>Add Item</button>
             </div>
         );
     }
