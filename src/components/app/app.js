@@ -13,10 +13,14 @@ export default class App extends React.Component {
     uuid = 0;
 
     state = {
+        term: '',
+        filter: 'all',
         todos: [
             this.createItem('Drink Coffee'),
             this.createItem('Make Awesome React App'),
             this.createItem('Go To Cinema'),
+            this.createItem('Drink Milk'),
+            this.createItem('Drink Whisky'),
         ]
     }
 
@@ -96,20 +100,47 @@ export default class App extends React.Component {
         });
     }
 
+    onSearch = (term) => {
+        this.setState({ term });
+    }
+
+    search(items, term) {
+        return items.filter(item => item.label.toLowerCase().includes(term.toLowerCase()));
+    }
+
+    filter(items, filter) {
+        switch(filter) {
+            case 'all':
+                return items;
+            case 'active':
+                return items.filter(item => !item.done);
+            case 'done':
+                return items.filter(item => item.done);
+            default:
+                return items;
+        }
+    }
+
+    onFilter = (filter) => {
+        this.setState({ filter });
+    }
+
     render () {
-        const { todos } = this.state;
+        const { todos, term, filter } = this.state;
         const doneCount = todos.filter(el => el.done).length;
         const todoCount = todos.length - doneCount;
+
+        const searchedTodos = this.filter(this.search(todos, term), filter);
 
         return (
             <div className="todo-app">
                 <AppHeader todo={ todoCount } done={ doneCount } />
                 <div className="top-panel d-flex">
-                    <SearchPanel />
-                    <ItemStatusFilter />
+                    <SearchPanel onSearch={ this.onSearch } />
+                    <ItemStatusFilter filter={ filter } onFilter={ this.onFilter } />
                 </div>
                 <ItemAddForm onAddItem={ this.onAddItem }/>
-                <TodoList todos={ todos } 
+                <TodoList todos={ searchedTodos } 
                           onDeleteItem={ this.onDeleteItem }
                           onToggleDone={ this.onToggleDone }
                           onToggleImportant={ this.onToggleImportant }/>
