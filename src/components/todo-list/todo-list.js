@@ -4,16 +4,16 @@ import './todo-list.css';
 
 import TodoListItem from '../todo-list-item';
 
-const TodoList = ({todos}) => {
-const elements = todos.map(todo => {
-    const {id, ...itemProps} = todo;
-    
-    return (
-        <li key={id} className="list-group-item">
-            <TodoListItem { ...itemProps } />
-        </li>
-    );
-});
+const TodoList = ({ todos, onDeleted }) => {
+    const elements = todos.map(todo => {
+        const {id, ...itemProps} = todo;
+        
+        return (
+            <li key={id} className="list-group-item">
+                <TodoListItem { ...itemProps } onDeleted={ () => onDeleted(id) } />
+            </li>
+        );
+    });
 
     return (
         <ul className="list-group todo-list">
